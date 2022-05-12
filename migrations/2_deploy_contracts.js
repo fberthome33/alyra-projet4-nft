@@ -1,5 +1,8 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
+var NftFactory = artifacts.require("./NftFactory.sol");
+var NftCollectionFactory = artifacts.require("./NftCollectionFactory.sol");
+
 
 module.exports = function(deployer) {
-  deployer.deploy(SimpleStorage);
+  deployer.deploy(NftFactory);
+  deployer.deploy(NftCollectionFactory);
 };
