@@ -1,73 +1,114 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+//import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import contractNftCollectionFactory from "./contracts/NftCollectionFactory.json";
+//import contractNftFactory from "./contracts/NftFactory.json";
 import getWeb3 from "./getWeb3";
 
+import Main from "./routes/main";
+import Home from "./routes/home";
+import Profile from "./routes/profile";
+import Assets from "./routes/assets";
+import User from "./routes/user";
+import Collection from "./routes/collection";
+import NewCollection from "./routes/newcollection";
+import Asset from "./routes/asset";
+import NewAsset from "./routes/newasset";
+import Explore from "./routes/explore";
+import Notfound from "./routes/notfound";
+import Loading from "./routes/loading";
+import Collections from "./routes/collections";
+
+import "animate.css";
 import "./App.css";
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
 
-  componentDidMount = async () => {
-    try {
-      // Get network provider and web3 instance.
-      const web3 = await getWeb3();
+    state = {
+        web3: null,
+        accounts: null,
+        contracts: null,
+        user: null,
+        loaded: false
+    };
 
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
+    runInit = async () => {
+        await this.initUser();
+        this.setState({ loaded: true });
+    };
 
-      // Get the contract instance.
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
-      const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
-        deployedNetwork && deployedNetwork.address,
-      );
-
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
-    } catch (error) {
-      // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
-      );
-      console.error(error);
+    initUser = async () => {
+        let user = {
+            address: this.state.accounts[0]
+        };
+        this.setState({ user });
     }
-  };
 
-  runExample = async () => {
-    const { accounts, contract } = this.state;
+    componentDidMount = async () => {
+        try {
+            // Get network provider and web3 instance.
+            const web3 = await getWeb3();
+            // Use web3 to get the user's accounts.
+            const accounts = await web3.eth.getAccounts();
+            // Get the contracts instances.
+            const networkId = await web3.eth.net.getId();
+            // Get Collection Factory instance.
+            const nftCollectionFactoryNetwork = contractNftCollectionFactory.networks[networkId];
+            const nftCollectionFactory = new web3.eth.Contract(
+                contractNftCollectionFactory.abi,
+                nftCollectionFactoryNetwork && nftCollectionFactoryNetwork.address,
+            );
 
-    // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
+            /* const deployedNetwork = SimpleStorageContract.networks[networkId];
+            const instance = new web3.eth.Contract(
+                SimpleStorageContract.abi,
+                deployedNetwork && deployedNetwork.address,
+            );
+            */
+            
+            const contracts = {
+                nftCollectionFactory: nftCollectionFactory
+            }
 
-    // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
+            // Set web3, accounts, and contract to the state, and then proceed with an
+            // example of interacting with the contract's methods.
+            this.setState({ web3, accounts, contracts }, this.runInit);
+            
+            // Watch accounts
+            window.ethereum.on('accountsChanged', (accounts) => {
+                this.setState({ accounts });                
+                this.initUser();
+                this.render();
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-    // Update state with the result.
-    this.setState({ storageValue: response });
-  };
-
-  render() {
-    if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+    render() {
+        if(!this.state.loaded){
+            return <Loading />;
+        }
+        return (
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Main state={this.state} />}>
+                        <Route index element={<Home />} />
+                        <Route path="asset/:address" element={<Asset />} />
+                        <Route path="asset/new" element={<NewAsset />} />
+                        <Route path="collection/:address" element={<Collection />} />
+                        <Route path="collection/new" element={<NewCollection />} />
+                        <Route path="explore" element={<Explore />} />
+                        <Route path="profile" element={<Profile />} />
+                        <Route path="profile/assets" element={<Assets />} />
+                        <Route path="profile/collections" element={<Collections />} />
+                        <Route path="user/:address" element={<User />} />
+                        <Route path="*" element={<Notfound />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        );
     }
-    return (
-      <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        <p>
-          Try changing the value stored on <strong>line 42</strong> of App.js.
-        </p>
-        <div>The stored value is: {this.state.storageValue}</div>
-      </div>
-    );
-  }
 }
 
 export default App;

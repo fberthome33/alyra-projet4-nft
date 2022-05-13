@@ -1,22 +1,121 @@
-.App {
-  text-align: center;
+html {
+    --header-height: 58px;
+    --header-bgcolor: #6b183f;
+    --nav-bgcolor: #dc143c;
 }
 
-.App-logo {
-  height: 40vmin;
+header, main, footer {
+    margin: auto;
+    padding: 0 12vw;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+header {
+    margin: auto;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: var(--header-height);
+    line-height: var(--header-height);
+    text-align: left;
+    background-color: var(--header-bgcolor);
+    color: cornsilk;
+    font-weight: bold;
+    font-size: 1.1rem;
+    z-index: 2;
 }
 
-.App-link {
-  color: #09d3ac;
+header #userAddress {
+    display: inline-block;
+    margin-right: 48px;
+}
+
+header nav {
+    position: relative;
+    float: right;
+}
+
+header nav .toggleNav {
+    height: var(--header-height);
+    width: var(--header-height);
+    background-color: var(--nav-bgcolor);
+    vertical-align: top;
+    border: 0;
+    cursor: pointer;
+    background-image: url('/icons/nav.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40%;
+}
+
+header nav ul {
+    z-index: 2;
+    display: block;
+    position: absolute;
+    top: calc(var(--header-height) + 16px);
+    right: -16px;
+    border-radius: 4px;
+    margin: 0px;
+    padding: 12px 0px;
+    list-style-type: none;
+    background-color: var(--nav-bgcolor);
+}
+
+header nav ul li {
+    padding: 0px 42px;
+}
+
+header nav ul li:hover {
+    background-color: var(--header-bgcolor);
+    transition: 1s;
+}
+
+header a {
+    text-decoration: none;
+    color: white;
+}
+
+main {
+    margin: auto;
+    margin-top: var(--header-height);
+    padding-top: 24px;
+    padding-bottom: 24px;
+    text-align: center;
+}
+
+h1 {
+    font-weight: normal;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.card {
+    border: 1px solid #cfcfcf;
+    margin: 12px;
+    border-radius: 8px;
+}
+
+.card .illustration {
+    aspect-ratio: 1;
+    background-color: bisque;
+}
+
+.card .title {
+    padding: 12px;
+    font-weight: bold;
+}
+
+#preview {
+    max-width: 300px;
+}
+
+footer {
+    background-color: rgb(221, 221, 221);
+    margin: auto;
+    text-align: center;
+    padding: 48px 0px;
+    font-weight: bold;
 }
