@@ -9,6 +9,9 @@ import "./Nft.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
+    event NftAddedToCollection(address _collectionAddress, address _nftAddress, address _creator);
+
+
     string public constant baseURI = "https://gateway.pinata.cloud/ipfs";
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
@@ -58,6 +61,7 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
         nft.setCollection(this);
         nftsInCollections.push(nft);
         super._beforeTokenTransfer(address(0), address(this), _tokenIds.current());
+        emit NftAddedToCollection(address(this), address(nft), msg.sender);
     }
 
     function removeNft(Nft nft) external onlyOwner{
@@ -67,5 +71,14 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
                 break;
             }
         }
+    }
+
+    /** 
+        getOneNft method
+        @param _nftId index of a nft
+        @return the nft specified by an _nftId index
+    */
+    function getOneNft(uint _nftId) external view returns (Nft) {
+        return nftsInCollections[_nftId];
     }
 }
