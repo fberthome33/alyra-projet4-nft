@@ -8,7 +8,7 @@ import "./NftCollection.sol";
   * @notice Give the ability to deploy a contract to manage ERC-721 tokens for an Artist. S/O @Snow
   * @dev    If the contract is already deployed for an _artistName, it will revert.
   */
-contract NFTCollectionFactory{
+contract NftCollectionFactory{
 
     event NftCollectionCreated(string _collectionName, address _collectionAddress, uint _timestamp, address _creator);
 
