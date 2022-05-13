@@ -8,7 +8,6 @@ import Moralis from "moralis";
 
 import Main from "./routes/main";
 import Home from "./routes/home";
-import Profile from "./routes/profile";
 import Assets from "./routes/assets";
 import User from "./routes/user";
 import Collection from "./routes/collection";
@@ -22,6 +21,8 @@ import Collections from "./routes/collections";
 
 import "animate.css";
 import "./App.css";
+
+require('dotenv').config({ path: __dirname + '/./../../.env' });
 
 class App extends Component {
 
@@ -47,7 +48,7 @@ class App extends Component {
         if (Moralis.User.current()) {
             await Moralis.User.logOut();
         } else {
-            await Moralis.authenticate({ signingMessage: "My custom message" });
+            await Moralis.authenticate({ signingMessage: "Connect your wallet" });
         }
         this.initUser();
     }
@@ -56,11 +57,10 @@ class App extends Component {
         try {
             
             await Moralis.start({
-                serverUrl: 'https://cq13uh1noutd.usemoralis.com:2053/server',
-                appId: 'M9cnbPzvEQOgc7cAHlOAV43hyK62TxKHZgGdIRP3',
-                masterKey: 'YWsK3iOt3hKr16lP1tCWHN05FOXzq3YOHUhjhHGP'
+                serverUrl: process.env.REACT_APP_MORALIS_SERVER_URL,
+                appId: process.env.REACT_APP_MORALIS_APPLICATION_ID,
+                masterKey: process.env.REACT_APP_MORALIS_SECRET
             });
-            
 
             // Get network provider and web3 instance.
             const web3 = await getWeb3();
@@ -115,7 +115,6 @@ class App extends Component {
                         <Route path="collection/:address" element={<Collection />} />
                         <Route path="collection/new" element={<NewCollection />} />
                         <Route path="explore" element={<Explore />} />
-                        <Route path="profile" element={<Profile />} />
                         <Route path="profile/assets" element={<Assets />} />
                         <Route path="profile/collections" element={<Collections />} />
                         <Route path="user/:address" element={<User />} />

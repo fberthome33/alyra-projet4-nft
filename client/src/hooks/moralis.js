@@ -3,15 +3,6 @@ const Moralis = require('moralis');
 const useMoralisPushIPFS = () => {
     return async (image) => {
 
-        /*
-        await Moralis.start({
-            serverUrl: 'https://cq13uh1noutd.usemoralis.com:2053/server',
-            appId: 'M9cnbPzvEQOgc7cAHlOAV43hyK62TxKHZgGdIRP3',
-            masterKey: 'YWsK3iOt3hKr16lP1tCWHN05FOXzq3YOHUhjhHGP'
-        });
-        await Moralis.authenticate();
-        */
-        
         // Save file input to IPFS
         const file = new Moralis.File(image.name, image);
         await file.saveIPFS({ useMasterKey: true });

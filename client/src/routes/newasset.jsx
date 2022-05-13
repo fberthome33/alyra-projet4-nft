@@ -1,6 +1,7 @@
 import React from "react";
 import { useOutletContext } from "react-router-dom";
 import useCreateAsset from "../hooks/createasset";
+import Forbidden from "../routes/forbidden";
 
 const NewAsset = () => {
     const [user, web3, contracts] = useOutletContext();    
@@ -13,6 +14,9 @@ const NewAsset = () => {
         console.log('done');
     }
     
+    if (!user) {
+        return <Forbidden />
+    }
     return (
         <main>
             <h1>

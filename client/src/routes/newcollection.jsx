@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-//import DragDrop from "../components/dragdrop";
-//import { Formik, Form, Field, ErrorMessage } from "formik";
 import useCreateCollection from "../hooks/createcollection";
 import usePinataPush from "../hooks/pinata";
 import useMoralisPushIPFS from "../hooks/moralis";
+import Forbidden from "../routes/forbidden";
 
 const NewCollection = () => {
 
@@ -49,6 +48,10 @@ const NewCollection = () => {
             console.log(collectionName);
             console.log(collectionImage);
         }
+    }
+
+    if (!user) {
+        return <Forbidden />
     }
     return (
         <main>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import Board from "../components/board";
 import Loading from "../routes/loading";
+import Forbidden from "../routes/forbidden";
 import useFetchCollections from "../hooks/fetchcollections";
 
 const Collections = () => {
@@ -24,6 +25,9 @@ const Collections = () => {
 
     if (!loaded) {
         return <Loading />
+    }
+    if (!user) {
+        return <Forbidden />
     }
     return (
         <main>
