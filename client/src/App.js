@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import contractNftCollectionFactory from "./contracts/NftCollectionFactory.json";
 //import contractNftFactory from "./contracts/NftFactory.json";
 import getWeb3 from "./getWeb3";
+import Moralis from "moralis";
 
 import Main from "./routes/main";
 import Home from "./routes/home";
@@ -38,14 +39,29 @@ class App extends Component {
     };
 
     initUser = async () => {
-        let user = {
-            address: this.state.accounts[0]
-        };
+        let user = Moralis.User.current();
         this.setState({ user });
+    }
+
+    authenticate = async () => {
+        if (Moralis.User.current()) {
+            await Moralis.User.logOut();
+        } else {
+            await Moralis.authenticate({ signingMessage: "My custom message" });
+        }
+        this.initUser();
     }
 
     componentDidMount = async () => {
         try {
+            
+            await Moralis.start({
+                serverUrl: 'https://cq13uh1noutd.usemoralis.com:2053/server',
+                appId: 'M9cnbPzvEQOgc7cAHlOAV43hyK62TxKHZgGdIRP3',
+                masterKey: 'YWsK3iOt3hKr16lP1tCWHN05FOXzq3YOHUhjhHGP'
+            });
+            
+
             // Get network provider and web3 instance.
             const web3 = await getWeb3();
             // Use web3 to get the user's accounts.
@@ -92,7 +108,7 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Main state={this.state} />}>
+                    <Route path="/" element={<Main state={this.state} authenticate={this.authenticate} />}>
                         <Route index element={<Home />} />
                         <Route path="asset/:address" element={<Asset />} />
                         <Route path="asset/new" element={<NewAsset />} />

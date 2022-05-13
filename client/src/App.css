@@ -42,13 +42,13 @@ header nav .toggleNav {
     vertical-align: top;
     border: 0;
     cursor: pointer;
-    background-image: url('/icons/nav.svg');
+    background-image: url('/icons/user.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 40%;
 }
 
-header nav ul {
+header nav ul, #connect {
     z-index: 2;
     display: block;
     position: absolute;
@@ -56,9 +56,44 @@ header nav ul {
     right: -16px;
     border-radius: 4px;
     margin: 0px;
+    background-color: var(--nav-bgcolor);
+}
+
+header nav ul {
     padding: 12px 0px;
     list-style-type: none;
-    background-color: var(--nav-bgcolor);
+}
+
+header nav ul li {
+    display: block;
+}
+
+#connect {
+    background-image: url('/icons/wallet.svg');
+    background-repeat: no-repeat;
+    background-position: center 48px;
+    background-size: 30%;
+    padding: 148px 36px 36px 36px;
+    text-align: center;
+}
+
+#connect button {
+    color: white;
+    border: 2px solid white;
+    border-radius: 4px;
+    background-color: transparent;
+    padding: 12px;
+    display: block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#connect button:disabled {
+    transition: 1s;
+    opacity: 0.6;
+    cursor: auto;
 }
 
 header nav ul li {
@@ -109,7 +144,7 @@ h1 {
 }
 
 #preview {
-    max-width: 300px;
+    max-width: 400px;
 }
 
 footer {

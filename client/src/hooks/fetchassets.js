@@ -18,7 +18,6 @@ const useFetchAssets = () => {
                 title: 'NFT4'
             }
         ];
-        console.log('fetching assets for', user.address);
         console.log(assets);
         console.log('done');
         return assets;

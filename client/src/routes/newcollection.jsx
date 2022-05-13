@@ -4,15 +4,18 @@ import { useOutletContext } from "react-router-dom";
 //import { Formik, Form, Field, ErrorMessage } from "formik";
 import useCreateCollection from "../hooks/createcollection";
 import usePinataPush from "../hooks/pinata";
+import useMoralisPushIPFS from "../hooks/moralis";
 
 const NewCollection = () => {
 
     const [user, web3, contracts] = useOutletContext();
     const createCollection = useCreateCollection(contracts.nftCollectionFactory);
     const pinataPush = usePinataPush();
+    const moralisPushIPFS = useMoralisPushIPFS();
 
     const [collectionName, setCollectionName] = useState();
     const [collectionImage, setCollectionImage] = useState();
+    const [collectionImagePreview, setCollectionImagePreview] = useState();
     
     const handleName = () => {
         const name = document.querySelector('#collectionName').value;
@@ -21,9 +24,10 @@ const NewCollection = () => {
     
     const handleImage = () => {
         const file = document.querySelector('input[type=file]').files[0];
+        setCollectionImage(file);
         const reader = new FileReader();
         reader.addEventListener("load", function () {
-            setCollectionImage(reader.result);
+            setCollectionImagePreview(reader.result);
         }, false);        
         if (file) {
             reader.readAsDataURL(file);
@@ -33,10 +37,12 @@ const NewCollection = () => {
     
     const run = async (e) => {
         e.preventDefault();
-        if (collectionName && collectionImage){
+       // if (collectionName && collectionImage){
+        if (collectionImage){
             console.log('running');
-            await pinataPush(collectionImage);
-            await createCollection(collectionName);
+            await moralisPushIPFS(collectionImage);
+            //await pinataPush(collectionImage);
+            //await createCollection(collectionName);
             console.log('done');
         } else {
             console.log('collection name or image is empty');
@@ -56,9 +62,13 @@ const NewCollection = () => {
                 <br/>
                 Collection Illustration<br/>
                 <input type="file" id="collectionImage" onChange={handleImage} />
-                <br/>
-                <br/>
-                <img id="preview" src={collectionImage}></img>
+                {collectionImagePreview &&
+                    <>
+                    <br/>
+                    <br/>
+                    <img id="preview" src={collectionImagePreview} />
+                    </>
+                }
                 <br/>
                 <br/>
                 <input type="submit" value="create" onClick={run} /> 

@@ -5,7 +5,7 @@ import Board from "../components/board";
 
 const Profile = () => {
     const [user, web3, contracts] = useOutletContext();    
-/*
+    /*
     const assets = [
         {
             address: '0xad92d062761dE59930eCb340B5443529067356D9',
@@ -28,7 +28,7 @@ const Profile = () => {
     return (
         <main>
             <h1>
-                Profile {truncateEthAddress(user.address)}
+                Profile
             </h1>
         </main>
     );

@@ -21,7 +21,7 @@ const usePinataPush = () => {
         let res = await pinata.testAuthentication();
         console.log('authentication: '+res);
 
-        let stream = fs.createReadStream('./src/service/server.jpg');
+        let stream = fs.createReadStream(image);
 
         const options = {
             pinataMetadata: {
