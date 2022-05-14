@@ -1,10 +1,5 @@
 const useFetchCollections = (contract) => {
-    return async (address = null) => {
-        console.log(address);
-        let customFilter = {};
-        if(address){
-            customFilter = { '_creator': 'fsdfbsdf' };
-        }
+    return async (customFilter = {}) => {
         const res = await contract.getPastEvents('NftCollectionCreated', {
             filter: customFilter,
             fromBlock: 0,
@@ -17,7 +12,9 @@ const useFetchCollections = (contract) => {
                 name: item.returnValues._collectionName,
                 timestamp: item.returnValues._timestamp,
                 creator: item.returnValues._creator,
+                tokenURI: item.returnValues._tokenURI,
             }
+            console.log(collection);
             collections.push(collection);
         }
         return collections;

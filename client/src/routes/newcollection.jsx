@@ -2,28 +2,65 @@ import React, { useState } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import useCreateCollection from "../hooks/createcollection";
 //import usePinataPush from "../hooks/pinata";
-import useMoralisPushIPFS from "../hooks/moralis";
+import useUploadImage from "../hooks/uploadimage";
 import Forbidden from "../routes/forbidden";
+import useFetchCollections from "../hooks/fetchcollections";
 
 const NewCollection = () => {
 
     const [user, web3, contracts] = useOutletContext();
     const navigate = useNavigate();
-    const createCollection = useCreateCollection(contracts.nftCollectionFactory, user.get('ethAddress'));
+    const fetchCollections = useFetchCollections(contracts.nftCollectionFactory);
+    const createCollection = useCreateCollection(contracts.nftCollectionFactory, user);
     //const pinataPush = usePinataPush();
-    const moralisPushIPFS = useMoralisPushIPFS();
+    const uploadImage = useUploadImage();
 
     const [submitting, setSubmitting] = useState(false);
-    const [collectionName, setCollectionName] = useState();
+    const [availableName, setAvailableName] = useState(true);
+    const [collectionName, setCollectionName] = useState(null);
     const [collectionNameRequired, setCollectionNameRequired] = useState(false);
-    const [collectionImage, setCollectionImage] = useState();
+    const [collectionImage, setCollectionImage] = useState(null);
+    const [collectionImageRequired, setCollectionImageRequired] = useState(false);
     const [collectionImagePreview, setCollectionImagePreview] = useState();
     
     const handleName = () => {
         const name = document.querySelector('#collectionName').value;
-        setCollectionName(name);
-        if (!collectionName) {
-            setCollectionNameRequired(true);
+        if(name){
+            let filter = {
+                _collectionName: name
+            }
+            fetchCollections(filter).then((res) => {
+                if (res.length === 0) {
+                    setCollectionName(name);
+                    setAvailableName(true);
+                } else {
+                    setAvailableName(false);
+                }
+            });
+        } else {
+            setCollectionName(name);
+            setAvailableName(true);
+        }
+        setCollectionNameRequired(false);
+    }
+    
+    const nameRequired = () => {
+        if (!availableName){
+            return (
+                <div className="required">
+                    <span className="animate__animated animate__fadeIn">
+                        this name is not available
+                    </span>
+                </div>
+            );
+        } else if (collectionNameRequired){
+            return (
+                <div className="required">
+                    <span className="animate__animated animate__fadeIn">
+                        the collection name is required
+                    </span>
+                </div>
+            );
         }
     }
     
@@ -32,27 +69,57 @@ const NewCollection = () => {
         setCollectionImage(file);
         const reader = new FileReader();
         reader.addEventListener("load", function () {
+            setCollectionImageRequired(false);
             setCollectionImagePreview(reader.result);
-        }, false);        
+        }, false);
         if (file) {
             reader.readAsDataURL(file);
         }
     }
-    
+
+    const selectImage = () => {
+        document.querySelector("#collectionImage").click();
+    }
+
+    const selectedImage = () => {
+        if (collectionImagePreview){
+            return <img id="imagePreview" src={collectionImagePreview} />
+        }
+        return <div id="imageSelector"></div>    
+    }
+
+    const imageRequired = () => {
+        if (collectionImageRequired) {
+            return (
+                <div className="required">
+                    <span className="animate__animated animate__fadeIn">
+                        the collection illustration is required
+                    </span>
+                </div>
+            );
+        }
+    }
+
     const run = async (e) => {
         e.preventDefault();
-        if (!collectionName) {
-            console.log('collectionNameRequired');
-            setCollectionNameRequired(true);
+        if (!collectionName || !collectionImage) {
+            if (!collectionName){
+                setCollectionNameRequired(true);
+            }
+            if (!collectionImage) {
+                setCollectionImageRequired(true);
+            }
         }
         else {
             setSubmitting(true);
             console.log('running');
-            let tokenURI = '';
+            /*let tokenURI = '';
             if(collectionImage){
-                let res = await moralisPushIPFS(collectionImage);
-                tokenURI += res.hash();
-            }
+                let image = await uploadImage(collectionImage);
+                tokenURI += image.hash();
+            }*/
+            let image = await uploadImage(collectionImage);
+            let tokenURI = image.hash();
             try {
                 let address = await createCollection(collectionName, tokenURI);                
                 setSubmitting(false);
@@ -73,25 +140,27 @@ const NewCollection = () => {
             <h1>
                 Create new collection
             </h1>
-            <form>
-                <label className={ collectionNameRequired ? "animate__animated animate__shakeX" : "" }>
-                    Collection Name
-                </label>
-                <input type="text" id="collectionName" onChange={handleName} />    
-                <br/>
-                <br/>
-                Collection Illustration<br/>
-                <input type="file" id="collectionImage" onChange={handleImage} />
-                {collectionImagePreview &&
-                    <>
-                    <br/>
-                    <br/>
-                    <img id="preview" src={collectionImagePreview} />
-                    </>
-                }
-                <br/>
-                <br/>
-                <input type="submit" value="create" onClick={run} disabled={submitting} /> 
+            <form className="createNew" autocomplete="off">
+                <fieldset>
+                    <label>
+                        Name (required)
+                    </label>
+                    <input type="text" id="collectionName" onBlur={handleName} />
+                    {nameRequired()}
+                </fieldset>
+                <fieldset>
+                    <label>
+                        Illustration (required)
+                    </label>
+                    <input type="file" id="collectionImage" onChange={handleImage} />                    
+                    <div onClick={selectImage}>
+                        {selectedImage()}
+                    </div>
+                    {imageRequired()}
+                </fieldset>
+                <fieldset>
+                    <input type="submit" value="create" onClick={run} disabled={submitting} />                     
+                </fieldset>
             </form>            
         </main>
     );

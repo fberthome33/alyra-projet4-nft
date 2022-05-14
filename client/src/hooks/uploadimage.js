@@ -1,10 +1,13 @@
 const Moralis = require('moralis');
 
-const useMoralisPushIPFS = () => {
+const useUploadImage = () => {
     return async (image) => {
         const file = new Moralis.File(image.name, image);
         await file.saveIPFS();
+        console.log(file.ipfs(), file.hash())
+        console.log('file uploaded')
         return file;
+        
         //console.log(file.ipfs(), file.hash())
 
         /*
@@ -28,4 +31,4 @@ const useMoralisPushIPFS = () => {
     }
 }
 
-export default useMoralisPushIPFS;
+export default useUploadImage;

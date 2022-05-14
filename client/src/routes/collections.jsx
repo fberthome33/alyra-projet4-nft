@@ -13,10 +13,12 @@ const Collections = () => {
     const [collections, setCollections] = useState([]);
 
     useEffect(() => {
-        fetchCollections(user.get('ethAddress')).then((res) => {
+        let customFilter = {
+            _creator: user.get('ethAddress')
+        }
+        fetchCollections(customFilter).then((res) => {
             let fetched = [];
             for (const collection of res) {
-                console.log(collection);
                 fetched.push(collection);
             }
             setCollections(fetched);

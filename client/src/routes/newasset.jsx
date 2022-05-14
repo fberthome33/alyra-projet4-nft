@@ -5,7 +5,7 @@ import Forbidden from "../routes/forbidden";
 
 const NewAsset = () => {
     const [user, web3, contracts] = useOutletContext();    
-    const createAsset = useCreateAsset(contracts.nftFactory, user.get('ethAddress'));
+    const createAsset = useCreateAsset(contracts.nftFactory, user);
     /*
     const run = async (e) => {
         e.preventDefault();

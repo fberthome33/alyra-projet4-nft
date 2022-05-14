@@ -1,4 +1,8 @@
-const useCreateCollection = (contract, address) => {
+const useCreateCollection = (contract, user) => {
+    let address = null;
+    if (user) {
+        address = user.get('ethAddress');
+    }
     return async (name, tokenURI) => {
         try {
             let res = await contract.methods.createNFTCollection(name, tokenURI).send({ from: address });

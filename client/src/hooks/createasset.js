@@ -1,4 +1,8 @@
-const useCreateAsset = (contract, address) => {
+const useCreateAsset = (contract, user) => {
+    let address = null;
+    if(user){
+        address = user.get('ethAddress');
+    }
     return async () => {
         console.log(contract);
         console.log(address);
