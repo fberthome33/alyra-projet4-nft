@@ -30,6 +30,8 @@ contract Nft is ERC721URIStorage {
         _mint(_owner, newItemId);
         _setTokenURI(newItemId, _tokenURI);
         _beforeTokenTransfer(address(0), _owner, newItemId);
+        detail.actif = true;
+        detail.nftName = _nftName;
         return newItemId;
     }
 
@@ -37,9 +39,10 @@ contract Nft is ERC721URIStorage {
         return string(abi.encodePacked(baseURI, _tokenURI));
     }
 
-    function setDetail(bool actif, uint price, address collection) public {
+    function setDetail(bool actif, uint price, address collection, string memory nftName) public {
         detail.actif = actif;
         detail.price = price;
+        detail.nftName = nftName;
         detail.collection = NftCollection(collection);
     }
 
