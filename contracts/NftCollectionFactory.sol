@@ -30,7 +30,7 @@ contract NftCollectionFactory{
             }
         }
         // Initialize the collection contract with the artist settings
-        NftCollection(collectionAddress).mintCollection(msg.sender, _tokenURI);
+        NftCollection(collectionAddress).mintCollection(msg.sender, _tokenURI, _collectionName);
 
         emit NftCollectionCreated(_collectionName, collectionAddress, block.timestamp, msg.sender, _tokenURI);
     }

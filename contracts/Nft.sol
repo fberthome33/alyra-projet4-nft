@@ -12,6 +12,7 @@ contract Nft is ERC721URIStorage {
     struct NftDetail{
         bool actif;
         uint price;
+        string nftName;
         NftCollection collection;
     }
 
@@ -22,7 +23,7 @@ contract Nft is ERC721URIStorage {
 
     constructor() ERC721 ("NFt", "NFT_FPM") {}
 
-    function mintNft(address _owner, string memory _tokenURI) public returns (uint256)
+    function mintNft(address _owner, string memory _tokenURI, string memory _nftName) public returns (uint256)
     {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();

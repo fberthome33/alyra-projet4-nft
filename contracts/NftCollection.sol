@@ -13,6 +13,7 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
 
 
     string public constant baseURI = "https://gateway.pinata.cloud/ipfs";
+    string public collectionName;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
@@ -20,13 +21,13 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
 
     Nft[] nftsInCollections;
 
-    function mintCollection(address _owner, string memory _tokenURI) public returns (uint256)
+    function mintCollection(address _owner, string memory _tokenURI, string memory _collectionName) public returns (uint256)
     {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(_owner, newItemId);
         _setTokenURI(newItemId, _tokenURI);
- 
+        collectionName = _collectionName;
         return newItemId;
     }
 
