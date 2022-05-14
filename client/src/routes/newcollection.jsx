@@ -23,25 +23,34 @@ const NewCollection = () => {
     const [collectionImageRequired, setCollectionImageRequired] = useState(false);
     const [collectionImagePreview, setCollectionImagePreview] = useState();
     
+    const isAvailable = async() => {
+        let filter = {
+            _collectionName: collectionName
+        }
+        let res = await fetchCollections(filter);
+        if(res.length===0){
+            return true;
+        }
+        return false;
+    }
+
     const handleName = () => {
         const name = document.querySelector('#collectionName').value;
         if(name){
-            let filter = {
-                _collectionName: name
+            if (isAvailable(name)){
+                console.log('available');
+                setAvailableName(true);
+                setCollectionNameRequired(false);
+                setCollectionName(name);
+            } else {
+                setCollectionName(null);
+                setAvailableName(false);
+                console.log('NOT available');
             }
-            fetchCollections(filter).then((res) => {
-                if (res.length === 0) {
-                    setCollectionName(name);
-                    setAvailableName(true);
-                } else {
-                    setAvailableName(false);
-                }
-            });
         } else {
-            setCollectionName(name);
+            setCollectionName(null);
             setAvailableName(true);
         }
-        setCollectionNameRequired(false);
     }
     
     const nameRequired = () => {
@@ -121,6 +130,8 @@ const NewCollection = () => {
             let image = await uploadImage(collectionImage);
             let tokenURI = image.hash();
             try {
+                console.log('creating contract...');
+                console.log('collection name ' + collectionName);
                 let address = await createCollection(collectionName, tokenURI);                
                 setSubmitting(false);
                 navigate('/collection/' + address);
@@ -140,7 +151,7 @@ const NewCollection = () => {
             <h1>
                 Create new collection
             </h1>
-            <form className="createNew" autocomplete="off">
+            <form className="createNew" autoComplete="off">
                 <fieldset>
                     <label>
                         Name (required)

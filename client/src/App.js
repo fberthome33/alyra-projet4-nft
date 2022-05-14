@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-//import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import contractNftCollectionFactory from "./contracts/NftCollectionFactory.json";
 import contractNftCollection from "./contracts/NftCollection.json";
 //import contractNftFactory from "./contracts/NftFactory.json";
