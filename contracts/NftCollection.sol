@@ -19,7 +19,7 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
         uint price;
         string nftName;
     }
-    NftDetail[] nftDetails;
+    NftDetail[] public nftDetails;
 
 
     constructor(string memory _collectionName, string memory _collectionSymbol) ERC721 (_collectionName, _collectionSymbol) {}

@@ -13,8 +13,8 @@ contract NftTrade {
     // Mapping from collection to buyProposal token IDs
     mapping(NftCollection => mapping(uint256 => BuyProposals)) private nftTrades;
     
-    event CreateOrderEvent(address _nftAddress, uint _tokenId, uint count);
-    event ProcessOrderEvent(address _nftAddress, uint _tokenId, uint index);
+    event CreateProposalBuyOrder(address _nftAddress, uint _tokenId, uint count);
+    event ProcessProposalBuyOrder(address _nftAddress, uint _tokenId, uint index);
     enum  BuyProposalStatus {
         Open,
         Executed,
@@ -51,20 +51,29 @@ contract NftTrade {
 
         nftTrades[_nftCollection][_tokenId].buyProposals.push(buyProposal);
         
-        emit CreateOrderEvent(address(_nftCollection), _tokenId, nftTrades[_nftCollection][_tokenId].buyProposals.length);
+        emit CreateProposalBuyOrder(address(_nftCollection), _tokenId, nftTrades[_nftCollection][_tokenId].buyProposals.length);
     }
 
-    function processOrder(NftCollection _nftCollection, uint256 _tokenId, uint index ) external {
+    function processOrder(NftCollection _nftCollection, uint256 _tokenId, uint proposalIndex ) external {
         require(msg.sender == _nftCollection.ownerOf(_tokenId), "You are not the tokenId owner");
 
-        require(index < nftTrades[_nftCollection][_tokenId].buyProposals.length, "this proposal for this index does not exists");
+        require(proposalIndex < nftTrades[_nftCollection][_tokenId].buyProposals.length, "this proposal for this index does not exists");
         require(nftTrades[_nftCollection][_tokenId].status == BuyProposalStatus.Open, "no proposals for this Nft");
         nftTrades[_nftCollection][_tokenId].status = BuyProposalStatus.Executed;
 
-        BuyProposal storage buyProposal = nftTrades[_nftCollection][_tokenId].buyProposals[index];
+        BuyProposal storage buyProposal = nftTrades[_nftCollection][_tokenId].buyProposals[proposalIndex];
         _nftCollection.changeNftOwner(buyProposal.proposalOwner, _tokenId);
+        
         payable(address(_nftCollection.ownerOf(_tokenId))).transfer(buyProposal.price);
-        emit CreateOrderEvent(address(_nftCollection), _tokenId, index);
+
+        for (uint index = 0; index < nftTrades[_nftCollection][_tokenId].buyProposals.length; index++ ) {
+            if(index != proposalIndex) {
+                BuyProposal storage notAcceptedProposal = nftTrades[_nftCollection][_tokenId].buyProposals[proposalIndex];
+                payable(address(notAcceptedProposal.proposalOwner)).transfer(notAcceptedProposal.price);
+            }
+        }
+ 
+        emit ProcessProposalBuyOrder(address(_nftCollection), _tokenId, proposalIndex);
     }
 
     function cancelOrders(NftCollection _nftCollection, uint256 _tokenId) external {
