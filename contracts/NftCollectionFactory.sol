@@ -10,7 +10,7 @@ import "./NftCollection.sol";
   */
 contract NftCollectionFactory{
 
-    event NftCollectionCreated(string _collectionName, address indexed _collectionAddress, uint _timestamp, address indexed _creator, string indexed _tokenURI);
+    event NftCollectionCreated(string indexed _collectionName, address indexed _collectionAddress, uint _timestamp, address indexed _creator, string _tokenURI);
     /**
       * @notice Deploy the ERC-721 Collection contract of the artist caller to be able to create NFTs later
       *
