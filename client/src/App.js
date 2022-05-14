@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 //import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import contractNftCollectionFactory from "./contracts/NftCollectionFactory.json";
+import contractNftCollection from "./contracts/NftCollection.json";
 //import contractNftFactory from "./contracts/NftFactory.json";
 import getWeb3 from "./getWeb3";
 import Moralis from "moralis";
@@ -74,6 +75,12 @@ class App extends Component {
                 contractNftCollectionFactory.abi,
                 nftCollectionFactoryNetwork && nftCollectionFactoryNetwork.address,
             );
+            // Get Collection instance.
+            const nftCollectionNetwork = contractNftCollection.networks[networkId];
+            const nftCollection = new web3.eth.Contract(
+                contractNftCollection.abi,
+                nftCollectionNetwork && nftCollectionNetwork.address,
+            );
 
             /* const deployedNetwork = SimpleStorageContract.networks[networkId];
             const instance = new web3.eth.Contract(
@@ -83,7 +90,8 @@ class App extends Component {
             */
             
             const contracts = {
-                nftCollectionFactory: nftCollectionFactory
+                nftCollectionFactory: nftCollectionFactory,
+                nftCollection: nftCollection
             }
 
             // Set web3, accounts, and contract to the state, and then proceed with an

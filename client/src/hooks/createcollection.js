@@ -1,10 +1,11 @@
-const useCreateCollection = (contract) => {
-    return async (name) => {
-        console.log('creating collection for');
-        console.log('collection named ' + name);
-        console.log(contract);
-        // let res = await contract.methods
-        console.log('done');
+const useCreateCollection = (contract, address) => {
+    return async (name, tokenURI) => {
+        try {
+            let res = await contract.methods.createNFTCollection(name, tokenURI).send({ from: address });
+            return res.events.NftCollectionCreated.returnValues._collectionAddress;
+        } catch (error) {
+            console.log(error);
+        }
     }
 };
 

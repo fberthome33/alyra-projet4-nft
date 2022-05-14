@@ -1,22 +1,22 @@
-import React from "react";
+import React, {useState} from "react";
 import { useParams, useOutletContext } from "react-router-dom";
 import truncateEthAddress from 'truncate-eth-address';
 import Board from "../components/board";
 import Error from "./error";
 
+import useGetCollectionDetails from "../hooks/getcollectiondetails";
+
 const Collection = () => {
-        
+
     const [user, web3, contracts] = useOutletContext();    
     const { address } = useParams();
+    const [tokenURI, setTokenURI] = useState();
 
-    let assets = [
-        {
-            address: '0xad92d062761dE59930eCb340B5443529067356D9'
-        },
-        {
-            address: '0xad92d062761dE59930eCb340B5443529067356D9'
-        }
-    ]
+    const collectionDetails = useGetCollectionDetails(contracts.nftCollectionFactory);
+    let res = collectionDetails(address);
+    console.log(res);
+
+    let assets = [];
 
     if (!web3.utils.isAddress(address)) {
         return <Error message="Requested collection not found..." />;
@@ -26,6 +26,7 @@ const Collection = () => {
             <h1>
                 Collection: {truncateEthAddress(address)}
             </h1>
+            <img src={tokenURI}></img>
             <Board type="asset" items={assets} />
         </main>
     );

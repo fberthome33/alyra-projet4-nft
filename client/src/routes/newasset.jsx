@@ -5,15 +5,15 @@ import Forbidden from "../routes/forbidden";
 
 const NewAsset = () => {
     const [user, web3, contracts] = useOutletContext();    
-    const createAsset = useCreateAsset(user, contracts.nftFactory);
-    
+    const createAsset = useCreateAsset(contracts.nftFactory, user.get('ethAddress'));
+    /*
     const run = async (e) => {
         e.preventDefault();
         console.log('running');
         let res = await createAsset();
         console.log('done');
     }
-    
+    */
     if (!user) {
         return <Forbidden />
     }
@@ -22,11 +22,6 @@ const NewAsset = () => {
             <h1>
                 Create new asset
             </h1>
-            <form>
-                <input type="text" />
-                <input type="file" />
-                <input type="submit" value="envoyer" onClick={run} />
-            </form>
         </main>
     );
 }

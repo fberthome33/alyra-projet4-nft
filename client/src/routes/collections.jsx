@@ -13,10 +13,11 @@ const Collections = () => {
     const [collections, setCollections] = useState([]);
 
     useEffect(() => {
-        fetchCollections(user).then((res) => {
+        fetchCollections(user.get('ethAddress')).then((res) => {
             let fetched = [];
-            for (const asset of res) {
-                fetched.push(asset);
+            for (const collection of res) {
+                console.log(collection);
+                fetched.push(collection);
             }
             setCollections(fetched);
             setLoaded(true);

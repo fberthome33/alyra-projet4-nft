@@ -1,24 +1,30 @@
 import React, { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import useCreateCollection from "../hooks/createcollection";
-import usePinataPush from "../hooks/pinata";
+//import usePinataPush from "../hooks/pinata";
 import useMoralisPushIPFS from "../hooks/moralis";
 import Forbidden from "../routes/forbidden";
 
 const NewCollection = () => {
 
     const [user, web3, contracts] = useOutletContext();
-    const createCollection = useCreateCollection(contracts.nftCollectionFactory);
-    const pinataPush = usePinataPush();
+    const navigate = useNavigate();
+    const createCollection = useCreateCollection(contracts.nftCollectionFactory, user.get('ethAddress'));
+    //const pinataPush = usePinataPush();
     const moralisPushIPFS = useMoralisPushIPFS();
 
+    const [submitting, setSubmitting] = useState(false);
     const [collectionName, setCollectionName] = useState();
+    const [collectionNameRequired, setCollectionNameRequired] = useState(false);
     const [collectionImage, setCollectionImage] = useState();
     const [collectionImagePreview, setCollectionImagePreview] = useState();
     
     const handleName = () => {
         const name = document.querySelector('#collectionName').value;
         setCollectionName(name);
+        if (!collectionName) {
+            setCollectionNameRequired(true);
+        }
     }
     
     const handleImage = () => {
@@ -30,23 +36,32 @@ const NewCollection = () => {
         }, false);        
         if (file) {
             reader.readAsDataURL(file);
-            //reader.readAsBinaryString(file);
         }
     }
     
     const run = async (e) => {
         e.preventDefault();
-       // if (collectionName && collectionImage){
-        if (collectionImage){
+        if (!collectionName) {
+            console.log('collectionNameRequired');
+            setCollectionNameRequired(true);
+        }
+        else {
+            setSubmitting(true);
             console.log('running');
-            await moralisPushIPFS(collectionImage);
+            let tokenURI = '';
+            if(collectionImage){
+                let res = await moralisPushIPFS(collectionImage);
+                tokenURI += res.hash();
+            }
+            try {
+                let address = await createCollection(collectionName, tokenURI);                
+                setSubmitting(false);
+                navigate('/collection/' + address);
+            } catch (error) {
+                setSubmitting(false);
+                console.log(error);
+            }
             //await pinataPush(collectionImage);
-            //await createCollection(collectionName);
-            console.log('done');
-        } else {
-            console.log('collection name or image is empty');
-            console.log(collectionName);
-            console.log(collectionImage);
         }
     }
 
@@ -59,7 +74,9 @@ const NewCollection = () => {
                 Create new collection
             </h1>
             <form>
-                Collection Name<br/>
+                <label className={ collectionNameRequired ? "animate__animated animate__shakeX" : "" }>
+                    Collection Name
+                </label>
                 <input type="text" id="collectionName" onChange={handleName} />    
                 <br/>
                 <br/>
@@ -74,7 +91,7 @@ const NewCollection = () => {
                 }
                 <br/>
                 <br/>
-                <input type="submit" value="create" onClick={run} /> 
+                <input type="submit" value="create" onClick={run} disabled={submitting} /> 
             </form>            
         </main>
     );
