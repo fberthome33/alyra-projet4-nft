@@ -14,6 +14,8 @@ truffle migrate --reset --network develop_ganache
 - build the client
 ```
 cd client
+cp .env.example .env
+## fill your own values then
 npm install
 npm start
 ```
