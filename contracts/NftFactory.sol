@@ -10,7 +10,7 @@ import "./Nft.sol";
   */
 contract NftFactory{
 
-    event NftCreated(string _nftName, address _nftAddress, uint _timestamp, address _creator, _tokenURI, _nfName);
+    event NftCreated(string indexed _nftName, address indexed _nftAddress, uint _timestamp, address indexed _creator, string _tokenURI);
 
     /**
       * @notice Deploy the ERC-721 Collection contract of the artist caller to be able to create NFTs later
@@ -33,6 +33,6 @@ contract NftFactory{
         // Initialize the Nft contract with the artist settings
         Nft(nftAddress).mintNft(msg.sender, _tokenURI, _nfName);
 
-        emit NftCreated(_nfName, nftAddress, block.timestamp, msg.sender, _tokenURI, _nfName);
+        emit NftCreated(_nfName, nftAddress, block.timestamp, msg.sender, _tokenURI);
     }
 }
