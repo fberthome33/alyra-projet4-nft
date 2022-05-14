@@ -68,7 +68,7 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     function removeNft(uint256 _tokenId) external {
-        _beforeTokenTransfer(msg.sender, address(0), _tokenId);
+        _burn(_tokenId);
         delete nftDetails[_tokenId];
     }
 
