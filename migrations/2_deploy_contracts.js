@@ -1,7 +1,7 @@
-var NftFactory = artifacts.require("NftFactory.sol");
+var NftTrade = artifacts.require("NftTrade");
 var NftCollectionFactory = artifacts.require("NftCollectionFactory");
 
 module.exports = function(deployer) {
-  deployer.deploy(NftFactory);
-  deployer.deploy(NftCollectionFactory);
+    deployer.deploy(NftTrade);
+    deployer.deploy(NftCollectionFactory);
 };
