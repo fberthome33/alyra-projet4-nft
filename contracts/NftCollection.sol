@@ -25,7 +25,7 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
 
     constructor(string memory _collectionName, string memory _collectionSymbol) ERC721 (_collectionName, _collectionSymbol) {}
 
-    function mintCollection(string memory _tokenURI) public onlyOwner returns (uint256) {
+    function mintCollection(string memory _tokenURI, uint _price) public onlyOwner returns (uint256) {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(msg.sender, newItemId);
@@ -34,14 +34,14 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
 
         NftDetail memory detail;
         detail.sellable = true;
-        detail.price= 0;
+        detail.price= _price;
 
         nftDetails.push(detail);
         return newItemId;
     }
 
-    function tokenURI( uint256 _tokenURI) public view override(ERC721URIStorage, ERC721) returns (string memory) {
-        return  super.tokenURI(_tokenURI);
+    function tokenURI( uint256 tokenId) public view override(ERC721URIStorage, ERC721) returns (string memory) {
+        return  super.tokenURI(tokenId);
     }
     
     function _beforeTokenTransfer(
