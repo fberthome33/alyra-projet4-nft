@@ -9,7 +9,7 @@ npm install
 ```
 - deploy to ganache 
 ```
-truffle migrate --reset --network develop_ganache
+truffle migrate --reset --network ganache
 ```
 - build the client
 ```
@@ -19,3 +19,8 @@ cp .env.example .env
 npm install
 npm start
 ```
+
+## Lien de déploiement
+-- Projet déployer sur https://fberthome33.github.io/collection/new
+
+## Lien de la vidéo de démonstration
