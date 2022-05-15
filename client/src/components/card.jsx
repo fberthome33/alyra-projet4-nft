@@ -10,7 +10,7 @@ const Card = (props) => {
             let creatorPath = '/user/'+item.creator;
             return(
                 <>
-                <b>{item.name}</b>
+                <b>{item.name}</b> ({item.assets.length} NTF)
                 <br />
                 created by: <Link to={creatorPath}>{truncateEthAddress(item.creator)}</Link>
                 </>

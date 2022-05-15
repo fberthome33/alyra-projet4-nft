@@ -7,7 +7,7 @@ const useCreateCollection = (contract, user) => {
         try {
             console.log(name);
             console.log(tokenURI);
-            let res = await contract.methods.createNFTCollection(name, tokenURI).send({ from: address });
+            let res = await contract.methods.createNFTCollection(name, '', tokenURI).send({ from: address });
             return res.events.NftCollectionCreated.returnValues._collectionAddress;
         } catch (error) {
             console.log(error);

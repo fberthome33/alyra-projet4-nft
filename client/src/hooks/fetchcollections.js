@@ -1,5 +1,9 @@
 const useFetchCollections = (contract) => {
     return async (customFilter = {}) => {
+        /*if (customFilter._collectionAddress){
+            console.log(customFilter._collectionAddress);
+        }*/
+        console.log(customFilter);
         const res = await contract.getPastEvents('NftCollectionCreated', {
             filter: customFilter,
             fromBlock: 0,

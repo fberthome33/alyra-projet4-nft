@@ -4,11 +4,13 @@ import Board from "../components/board";
 import Loading from "../routes/loading";
 import Forbidden from "../routes/forbidden";
 import useFetchCollections from "../hooks/fetchcollections";
+import useGetCollectionDetails from "../hooks/getcollectiondetails";
 
 const Collections = () => {
 
     const [user, web3, contracts] = useOutletContext();
     const fetchCollections = useFetchCollections(contracts.nftCollectionFactory);
+    const getCollectionDetails = useGetCollectionDetails(web3);
     const [loaded, setLoaded] = useState(false);
     const [collections, setCollections] = useState([]);
 
@@ -16,9 +18,12 @@ const Collections = () => {
         let customFilter = {
             _creator: user.get('ethAddress')
         }
-        fetchCollections(customFilter).then((res) => {
+        fetchCollections(customFilter).then(async(res) => {
             let fetched = [];
-            for (const collection of res) {
+            for (const col of res) {
+                console.log(col);
+                let collection = await getCollectionDetails(col.address);
+                collection.creator = col.creator;
                 fetched.push(collection);
             }
             setCollections(fetched);

@@ -10,7 +10,7 @@ import "./NftCollection.sol";
   */
 contract NftCollectionFactory{
 
-    event NftCollectionCreated(string indexed _collectionName, address indexed _collectionAddress, uint _timestamp, address indexed _creator, string _tokenURI);
+    event NftCollectionCreated(bytes32 indexed _collectionName, address indexed _collectionAddress, uint _timestamp, address indexed _creator, string _tokenURI);
 
     address[] public collections;
 
@@ -37,7 +37,9 @@ contract NftCollectionFactory{
 
         // Initialize the collection contract with the collection ist settings
         //NftCollection(collectionAddress).mintCollection(msg.sender, _tokenURI);
-        emit NftCollectionCreated(_collectionName, collectionAddress, block.timestamp, msg.sender, _tokenURI);
+        bytes32 _collectionNameInBytes32 = bytes32(bytes(_collectionName));
+
+        emit NftCollectionCreated(_collectionNameInBytes32, collectionAddress, block.timestamp, msg.sender, _tokenURI);
     }
 
     function getCreationBytecode(string memory _collectionName, string memory _collectionSymbol) public pure returns (bytes memory) {

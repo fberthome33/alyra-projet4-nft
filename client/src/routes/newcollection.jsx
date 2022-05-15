@@ -23,30 +23,38 @@ const NewCollection = () => {
     const [collectionImageRequired, setCollectionImageRequired] = useState(false);
     const [collectionImagePreview, setCollectionImagePreview] = useState();
     
-    const isAvailable = async() => {
+    const isAvailable = async (name) => {
+        const bytes32name = (name) => {
+            let kck256 = web3.utils.asciiToHex(name);
+            return web3.utils.padRight(kck256, 32);
+        }
         let filter = {
-            _collectionName: collectionName
-        }
+            _collectionName: bytes32name(name)
+        }        
         let res = await fetchCollections(filter);
-        if(res.length===0){
+        console.log(res);
+        if (res.length === 0) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
-    const handleName = () => {
+    const handleName = async () => {
         const name = document.querySelector('#collectionName').value;
         if(name){
-            if (isAvailable(name)){
-                console.log('available');
-                setAvailableName(true);
-                setCollectionNameRequired(false);
-                setCollectionName(name);
-            } else {
-                setCollectionName(null);
-                setAvailableName(false);
-                console.log('NOT available');
-            }
+            isAvailable(name).then((available)=>{
+                if (available){
+                    console.log('available');
+                    setAvailableName(true);
+                    setCollectionNameRequired(false);
+                    setCollectionName(name);
+                } else {
+                    console.log('NOT available');
+                    setCollectionName(null);
+                    setAvailableName(false);
+                }
+            });
         } else {
             setCollectionName(null);
             setAvailableName(true);

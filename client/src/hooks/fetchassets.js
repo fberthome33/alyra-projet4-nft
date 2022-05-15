@@ -1,6 +1,6 @@
 const useFetchAssets = () => {
     return async (contract) => {
-        const res = await contract.getPastEvents('NftAddedToCollection');
+        const res = await contract.getPastEvents('NewTokenMinted');
         let assets = [];
         for (const item of res) {
             let asset = {
