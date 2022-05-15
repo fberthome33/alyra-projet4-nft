@@ -18,16 +18,14 @@ const Explore = () => {
         fetchCollections().then(async (res) => {
             let fetched = [];
             for (const col of res) {
-                console.log(col);
                 let collection = await getCollectionDetails(col.address);
                 collection.creator = col.creator;
                 fetched.push(collection);
             }
-            // TO BE DONE
-            // ORDER COLLECTION BY TIMESTAMP DESC
-            
-
-            setCollections(fetched);
+            let sorted = fetched.sort((a, b) => {
+                return b.timestamp - a.timestamp;
+            });
+            setCollections(sorted);
             setLoaded(true);
         });
     }, []);

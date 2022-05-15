@@ -121,12 +121,14 @@ class App extends Component {
                         <Route path="asset/:address" element={<Asset />} />
                         <Route path="asset/new" element={<ChooseCollection />} />
                         <Route path="collection/:address/new" element={<NewAsset />} />
+                        <Route path="collection/:address/:tokenid" element={<Asset />} />
                         <Route path="collection/:address" element={<Collection />} />
                         <Route path="collection/new" element={<NewCollection />} />
                         <Route path="explore" element={<Explore />} />
                         <Route path="profile/assets" element={<Assets />} />
                         <Route path="profile/collections" element={<Collections />} />
-                        <Route path="user/:address" element={<User />} />
+                        <Route path="user/:address/assets" element={<Assets />} />
+                        <Route path="user/:address/collections" element={<Collections />} />
                         <Route path="*" element={<Notfound />} />
                     </Route>
                 </Routes>

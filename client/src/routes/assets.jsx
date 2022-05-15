@@ -4,11 +4,12 @@ import Board from "../components/board";
 import Loading from "../routes/loading";
 import Forbidden from "../routes/forbidden";
 import useFetchAssetsByOwner from "../hooks/fetchassetsbyowner";
+import useFetchCollections from "../hooks/fetchcollections";
 
 const Assets = () => {
     
     const [user, web3, contracts] = useOutletContext();
-    const fetchAssetsByOwner = useFetchAssetsByOwner();
+    const fetchAssetsByOwner = useFetchAssetsByOwner(web3);
     const fetchCollections = useFetchCollections(contracts.nftCollectionFactory);
     const [loaded, setLoaded] = useState(false);
     const [assets, setAssets] = useState([]);
@@ -26,10 +27,6 @@ const Assets = () => {
             setAssets(fetched);
             setLoaded(true);
         });
-
-        for (const item of res) {
-
-        }
     }, []);
     
     if (!loaded) {

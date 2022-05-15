@@ -1,11 +1,9 @@
 import contractNftCollection from "../contracts/NftCollection.json";
-import contractNftCollectionFactory from "../contracts/NftCollectionFactory.json";
 import useFetchAssetsByCollection from "./fetchassetsbycollection";
 import useFetchCollections from "./fetchcollections";
 
 const useGetCollectionDetails = (web3, factory) => {
     const fetchAssetsByCollection = useFetchAssetsByCollection();
-    //const nftCollectionFactory = new web3.eth.Contract(contractNftCollectionFactory.abi, factoryAddress);
     const fetchCollections = useFetchCollections(factory);
     return async (address) => {
         try {
@@ -16,15 +14,16 @@ const useGetCollectionDetails = (web3, factory) => {
             }
             let coll = await fetchCollections(filter);
             let assets = await fetchAssetsByCollection(nftCollection);
+           // let assetsNbr = await fetchAssetsByCollection(nftCollection);
             let res = {
                 address: address,
                 creator: coll[0].creator,
                 timestamp: coll[0].timestamp,
                 name: name,
                 tokenURI: coll[0].tokenURI,
-                assets: assets
+                assets: assets,
+             //   assetsNbr: 
             }
-            console.log(res);
             return res;
         } catch (error) {
             console.log(error);

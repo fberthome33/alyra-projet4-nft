@@ -3,8 +3,12 @@ import { Link } from "react-router-dom";
 import truncateEthAddress from 'truncate-eth-address';
 
 const Card = (props) => {
+    
     const item = props.item;
-    const path = "/" + props.type + "/" + item.address;
+    let path = "/collection/" + item.address;
+    if(props.type === 'asset'){
+        path += "/" + item.tokenId;
+    }
 
     const bgurl = () => {
         return 'https://ipfs.moralis.io:2053/ipfs/' + item.tokenURI;
@@ -12,7 +16,7 @@ const Card = (props) => {
 
     const description = () => {
         if (props.type === 'collection') {
-            let creatorPath = '/user/'+item.creator;
+            let creatorPath = '/user/'+item.creator+'/collections';
             return(
                 <>
                 <b>{item.name}</b> ({item.assets.length} NTF)
@@ -23,7 +27,9 @@ const Card = (props) => {
         }
         else {
             return (
-                <></>
+                <>
+                    <b>NFT {truncateEthAddress(item.address)} #{item.tokenId}</b>
+                </>
             )
         }
     }

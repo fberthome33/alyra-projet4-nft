@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import Board from "../components/board";
+import ProfilePicture from "../components/profilepicture";
 import Error from "./error";
 import Loading from "./loading";
 
@@ -23,7 +24,7 @@ const Collection = () => {
     }, []);
 
     const createButton = () => {
-        if (web3.utils.toChecksumAddress(collection.creator) === web3.utils.toChecksumAddress(user.get('ethAddress')) ){
+        if (user && web3.utils.toChecksumAddress(collection.creator) === web3.utils.toChecksumAddress(user.get('ethAddress')) ){
             return (
                 <form className="createNew">
                     <button onClick={() => { navigate('/collection/' + address + '/new'); }}>
@@ -41,6 +42,7 @@ const Collection = () => {
     }
     return (
         <main>
+            <ProfilePicture uri={collection.tokenURI} />
             <h1>
                 Collection: {collection.name}<br/>
             </h1>

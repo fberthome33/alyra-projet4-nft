@@ -215,6 +215,16 @@ form.createNew input[type=file] {
     white-space: nowrap;
 }
 
+.profilePicture {
+    width: 260px;
+    height: 260px;
+    border-radius: 18px;
+    border: 1px solid grey;
+    background-position: center;
+    background-size: cover;
+    margin: auto;
+}
+
 footer {
     background-color: rgb(221, 221, 221);
     margin: auto;

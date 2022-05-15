@@ -31,10 +31,12 @@ const Authentication = (props) => {
     const navItems = () => {
         if (showNav){
             if(user){
+                let urlAssets = '/user/' + user.get('ethAddress') +'/assets';
+                let urlCollections = '/user/' + user.get('ethAddress') +'/collections';
                 return (
                     <ul className="animate__animated animate__fadeIn animate__faster">
-                        <li><Link to="/profile/assets" onClick={() => setShowNav(false)}>my assets</Link></li>
-                        <li><Link to="/profile/collections" onClick={() => setShowNav(false)}>my collections</Link></li>
+                        <li><Link to={urlAssets} onClick={() => setShowNav(false)}>my assets</Link></li>
+                        <li><Link to={urlCollections} onClick={() => setShowNav(false)}>my collections</Link></li>
                         <li><Link to="/collection/new" onClick={() => setShowNav(false)}>create new collection</Link></li>
                         <li><Link to="/asset/new" onClick={() => setShowNav(false)}>create new asset</Link></li>
                         <li><Link to="/explore" onClick={() => setShowNav(false)}>explore</Link></li>

@@ -186,7 +186,7 @@ const NewCollection = () => {
                 </fieldset>
                 <fieldset>
                     <button onClick={(e) => { run(e) }} disabled={submitting}>
-                        create
+                        create collection
                     </button>                     
                 </fieldset>
             </form>            
