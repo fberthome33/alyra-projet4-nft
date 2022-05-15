@@ -10,7 +10,7 @@ const Explore = () => {
 
     const [user, web3, contracts] = useOutletContext();
     const fetchCollections = useFetchCollections(contracts.nftCollectionFactory);
-    const getCollectionDetails = useGetCollectionDetails(web3);
+    const getCollectionDetails = useGetCollectionDetails(web3, contracts.nftCollectionFactory);
     const [loaded, setLoaded] = useState(false);
     const [collections, setCollections] = useState([]);
 

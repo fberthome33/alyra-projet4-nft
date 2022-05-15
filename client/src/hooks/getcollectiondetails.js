@@ -1,22 +1,31 @@
 import contractNftCollection from "../contracts/NftCollection.json";
+import contractNftCollectionFactory from "../contracts/NftCollectionFactory.json";
 import useFetchAssetsByCollection from "./fetchassetsbycollection";
+import useFetchCollections from "./fetchcollections";
 
-const useGetCollectionDetails = (web3) => {
+const useGetCollectionDetails = (web3, factory) => {
     const fetchAssetsByCollection = useFetchAssetsByCollection();
+    //const nftCollectionFactory = new web3.eth.Contract(contractNftCollectionFactory.abi, factoryAddress);
+    const fetchCollections = useFetchCollections(factory);
     return async (address) => {
         try {
-            let contract = new web3.eth.Contract(contractNftCollection.abi, address);
-            let collectionName = await contract.methods.name().call();
-            //let tokenURI = await contract.methods.tokenURI().call();
-            let assets = await fetchAssetsByCollection(contract);
-            let details = {
+            let nftCollection = new web3.eth.Contract(contractNftCollection.abi, address);
+            let name = await nftCollection.methods.name().call();
+            let filter = {
+                _collectionAddress: address
+            }
+            let coll = await fetchCollections(filter);
+            let assets = await fetchAssetsByCollection(nftCollection);
+            let res = {
                 address: address,
-                name: collectionName,
-             //   tokenURI: tokenURI,
+                creator: coll[0].creator,
+                timestamp: coll[0].timestamp,
+                name: name,
+                tokenURI: coll[0].tokenURI,
                 assets: assets
             }
-            console.log(details);
-            return details;
+            console.log(res);
+            return res;
         } catch (error) {
             console.log(error);
         }

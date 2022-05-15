@@ -14,7 +14,6 @@ const useFetchCollections = (factory) => {
                 creator: item.returnValues._creator,
                 tokenURI: item.returnValues._tokenURI,
             }
-            console.log(collection);
             collections.push(collection);
         }
         return collections;
