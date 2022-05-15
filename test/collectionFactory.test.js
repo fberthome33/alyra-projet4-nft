@@ -16,10 +16,6 @@ contract("NftCollectionFactory", accounts => {
     const collectionAddress = await collectionFactoryInstance.createNFTCollection("collectionName", "collectionSymbol", "TokenUri", { from: accounts[0] });
  
     expect(collectionAddress).not.empty;
-    const nftCollectionCreatedEvent = expectEvent(collectionAddress, 'NftCollectionCreated', {
-      _collectionName: bytes64name("collectionName")
-    });
-
     expect(nftCollectionCreatedEvent.args['_collectionAddress']).is.not.empty;
     expect(nftCollectionCreatedEvent.args['_timestamp']).is.not.empty;
     expect(nftCollectionCreatedEvent.args['_timestamp']).to.be.bignumber;

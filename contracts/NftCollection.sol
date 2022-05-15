@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "./NftMarketPlace.sol";
 
 contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
     event NewTokenMinted(address indexed _collectionAddress, uint256 indexed _tokenId, address indexed _creator);
@@ -15,7 +16,7 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
 
 
     struct NftDetail{
-        bool actif;
+        bool sellable;
         uint price;
         string nftName;
     }
@@ -24,17 +25,15 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
 
     constructor(string memory _collectionName, string memory _collectionSymbol) ERC721 (_collectionName, _collectionSymbol) {}
 
-    function mintCollection(address _owner, string memory _tokenURI) public returns (uint256)
-    {
+    function mintCollection(string memory _tokenURI) public onlyOwner returns (uint256) {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
-        _mint(_owner, newItemId);
+        _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, _tokenURI);
-        _beforeTokenTransfer(address(0), msg.sender, newItemId);
         emit NewTokenMinted(address(this), newItemId, msg.sender);
 
         NftDetail memory detail;
-        detail.actif = true;
+        detail.sellable = true;
         detail.price= 0;
 
         nftDetails.push(detail);
@@ -55,6 +54,19 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
     }
     
 
+    function removeNft(uint256 _tokenId) external {
+        _burn(_tokenId);
+        delete nftDetails[_tokenId];
+    }
+
+    function changeNftOwner(address _newOwnerAddress, uint256 _tokenId) external {
+        // @dev msg.sender must be a NftMarketPlace type
+        //NftMarketPlace marketPlace = NftMarketPlace(msg.sender);
+        //require(marketPlace.isTradeOpen(this,  _tokenId), "No open trade");
+        _transfer(tx.origin, _newOwnerAddress, _tokenId);
+    }
+
+
     function _burn(uint256 tokenId) internal virtual override(ERC721URIStorage, ERC721) {
       super._burn(tokenId);
     }
@@ -65,15 +77,6 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Enumerable, ERC721) returns (bool) {
         return super.supportsInterface(interfaceId);
 
-    }
-
-    function removeNft(uint256 _tokenId) external {
-        _burn(_tokenId);
-        delete nftDetails[_tokenId];
-    }
-
-    function changeNftOwner(address _newOwnerAddress, uint256 _tokenId) external {
-        _beforeTokenTransfer(msg.sender, _newOwnerAddress, _tokenId);
     }
 
     function destroySmartContract(address payable _to) public onlyOwner {
@@ -90,10 +93,11 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
         return nftDetails[_index];
     }
 
-    function setDetail(uint256 _index, bool actif, uint price, string memory nftName) external  {
+    function setDetail(uint256 _index, bool _sellable, uint _price, string memory nftName) external  {
+        require(_index < nftDetails.length, "index out of bounds");
         NftDetail memory detail;
-        detail.actif = actif;
-        detail.price = price;
+        detail.sellable = _sellable;
+        detail.price = _price;
         detail.nftName = nftName;
         nftDetails[_index] = detail;
     }
