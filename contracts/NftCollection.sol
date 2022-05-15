@@ -41,7 +41,7 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     function tokenURI( uint256 _tokenURI) public view override(ERC721URIStorage, ERC721) returns (string memory) {
-        return string(abi.encodePacked(_baseURI(), _tokenURI));
+        return  super.tokenURI(_tokenURI);
     }
     
     function _beforeTokenTransfer(
