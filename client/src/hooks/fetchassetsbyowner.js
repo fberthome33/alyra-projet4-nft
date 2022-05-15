@@ -1,15 +1,14 @@
-const useFetchAssetsByOwner = () => {
-    return async (user) => {
-        
-        //const res = await contract.getPastEvents('NewTokenMinted');
+import contractNftCollection from "../contracts/NftCollection.json";
+
+const useFetchAssetsByOwner = (web3, factory) => {
+    return async (user, addressCollection) => {
+        let nftCollection = new web3.eth.Contract(contractNftCollection.abi, address);
+        const tokenCount = await nftCollection.methods.balanceOf(user);
         let assets = [];
-        /*for (const item of res) {
-            let asset = {
-                address: item.returnValues._nftAddress
-            }
-            console.log(asset);
-            assets.push(asset);
-        }*/
+        for (const index = 0; index < tokenCount; i++) {
+            const tokenId = await nftCollection.methods.tokenOfOwnerByIndex(user, index);
+            assets.push(tokenId);
+        }
         return assets;
     }
 }

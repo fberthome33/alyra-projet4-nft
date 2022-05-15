@@ -9,18 +9,27 @@ const Assets = () => {
     
     const [user, web3, contracts] = useOutletContext();
     const fetchAssetsByOwner = useFetchAssetsByOwner();
+    const fetchCollections = useFetchCollections(contracts.nftCollectionFactory);
     const [loaded, setLoaded] = useState(false);
     const [assets, setAssets] = useState([]);
     
     useEffect(()=>{
-        fetchAssetsByOwner(user).then((res) => {
+        let customFilter = {
+        };
+        fetchCollections(customFilter).then(async(res) => {
             let fetched = [];
-            /*for (const asset of res) {
-                fetched.push(asset);
-            }*/
+            for (const col of res) {
+                console.log(col);
+                let tokenIds = await fetchAssetsByOwner(user.get('ethAddress'), col.address);
+                tokenIds.forEach(tokenId => fetched.push(tokenId));
+            }
             setAssets(fetched);
             setLoaded(true);
         });
+
+        for (const item of res) {
+
+        }
     }, []);
     
     if (!loaded) {
