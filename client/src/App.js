@@ -119,6 +119,7 @@ class App extends Component {
                         <Route index element={<Home />} />
                         <Route path="asset/:address" element={<Asset />} />
                         <Route path="asset/new" element={<NewAsset />} />
+                        <Route path="collection/:address/new" element={<NewAsset />} />
                         <Route path="collection/:address" element={<Collection />} />
                         <Route path="collection/new" element={<NewCollection />} />
                         <Route path="explore" element={<Explore />} />

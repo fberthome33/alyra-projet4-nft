@@ -3,21 +3,21 @@ import { useOutletContext } from "react-router-dom";
 import Board from "../components/board";
 import Loading from "../routes/loading";
 import Forbidden from "../routes/forbidden";
-import useFetchAssets from "../hooks/fetchassets";
+import useFetchAssetsByOwner from "../hooks/fetchassetsbyowner";
 
 const Assets = () => {
     
     const [user, web3, contracts] = useOutletContext();
-    const fetchAssets = useFetchAssets();
+    const fetchAssetsByOwner = useFetchAssetsByOwner();
     const [loaded, setLoaded] = useState(false);
     const [assets, setAssets] = useState([]);
     
     useEffect(()=>{
-        fetchAssets(user).then((res) => {
+        fetchAssetsByOwner(user).then((res) => {
             let fetched = [];
-            for (const asset of res) {
+            /*for (const asset of res) {
                 fetched.push(asset);
-            }
+            }*/
             setAssets(fetched);
             setLoaded(true);
         });

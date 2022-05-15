@@ -1,4 +1,4 @@
-const useFetchAssets = () => {
+const useFetchAssetsByCollection = () => {
     return async (contract) => {
         const res = await contract.getPastEvents('NewTokenMinted');
         let assets = [];
@@ -13,4 +13,4 @@ const useFetchAssets = () => {
     }
 }
 
-export default useFetchAssets;
+export default useFetchAssetsByCollection;
