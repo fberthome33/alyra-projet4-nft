@@ -17,7 +17,14 @@ module.exports = {
     },
     develop: {
       port: 8545
-    }
+    },
+    kovan: {
+      provider: () => new HDWalletProvider(`${process.env.MNEMONIC}`, `https://kovan.infura.io/v3/${process.env.INFURA_PROJECT_ID}`),
+      from: "0x362e75e2744Fa57f7F272913b692c6bFbF5692da",
+      network_id: 42,
+      //gas: 3000000,
+      //gasPrice: 10000000000
+    },
   },
   // Set default mocha options here, use special reporters etc.
   mocha: {
