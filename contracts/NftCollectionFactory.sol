@@ -37,6 +37,7 @@ contract NftCollectionFactory{
 
         // Initialize the collection contract with the collection ist settings
         //NftCollection(collectionAddress).mintCollection(msg.sender, _tokenURI);
+        NftCollection(collectionAddress).transferOwnership(msg.sender);
         bytes32 _collectionNameInBytes32 = bytes32(bytes(_collectionName));
 
         emit NftCollectionCreated(_collectionNameInBytes32, collectionAddress, block.timestamp, msg.sender, _tokenURI);
