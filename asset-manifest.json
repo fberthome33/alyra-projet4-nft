@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/alyra-projet4-nft/static/css/main.70e9a981.chunk.css",
+    "main.js": "/alyra-projet4-nft/static/js/main.1e9d7521.chunk.js",
+    "main.js.map": "/alyra-projet4-nft/static/js/main.1e9d7521.chunk.js.map",
+    "runtime-main.js": "/alyra-projet4-nft/static/js/runtime-main.b2693867.js",
+    "runtime-main.js.map": "/alyra-projet4-nft/static/js/runtime-main.b2693867.js.map",
+    "static/css/2.2ce0d9b2.chunk.css": "/alyra-projet4-nft/static/css/2.2ce0d9b2.chunk.css",
+    "static/js/2.0f275538.chunk.js": "/alyra-projet4-nft/static/js/2.0f275538.chunk.js",
+    "static/js/2.0f275538.chunk.js.map": "/alyra-projet4-nft/static/js/2.0f275538.chunk.js.map",
+    "index.html": "/alyra-projet4-nft/index.html",
+    "precache-manifest.d88a78c9709f992cda2eb25d23950505.js": "/alyra-projet4-nft/precache-manifest.d88a78c9709f992cda2eb25d23950505.js",
+    "service-worker.js": "/alyra-projet4-nft/service-worker.js",
+    "static/css/2.2ce0d9b2.chunk.css.map": "/alyra-projet4-nft/static/css/2.2ce0d9b2.chunk.css.map",
+    "static/css/main.70e9a981.chunk.css.map": "/alyra-projet4-nft/static/css/main.70e9a981.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b2693867.js",
+    "static/css/2.2ce0d9b2.chunk.css",
+    "static/js/2.0f275538.chunk.js",
+    "static/css/main.70e9a981.chunk.css",
+    "static/js/main.1e9d7521.chunk.js"
+  ]
+}
