@@ -15,6 +15,14 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
       
     },
+      
+    ropsten: {
+        provider: function () {
+            return new HDWalletProvider(process.env.PRIVATE_KEY, process.env.INFURA_ROPSTEN);
+        },
+        network_id: '3',
+    },
+
     develop: {
       port: 8545
     },
