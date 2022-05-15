@@ -13,7 +13,9 @@ const NewAsset = () => {
     const createAsset = useCreateAsset(user, web3);
     const [submitting, setSubmitting] = useState(false);
     const [collection, setCollection] = useState();
+    const [assetPrice, setAssetPrice] = useState(null);
     const [assetImage, setAssetImage] = useState(null);
+    const [assetPriceRequired, setAssetPriceRequired] = useState(false);
     const [assetImageRequired, setAssetImageRequired] = useState(false);
     const [assetImagePreview, setAssetImagePreview] = useState();
     const [loaded, setLoaded] = useState(false);
@@ -29,6 +31,15 @@ const NewAsset = () => {
         setLoaded(true);
     }, []);
 
+    const handlePrice = () => {
+        const price = document.querySelector('#assetPrice').value;
+        if(price > 0){
+            setAssetPrice(price);
+            setAssetPriceRequired(false);
+        } else {
+            setAssetPrice(null);
+        }
+    }
 
     const handleImage = () => {
         const file = document.querySelector('input[type=file]').files[0];
@@ -54,6 +65,18 @@ const NewAsset = () => {
         return <div id="imageSelector"></div>
     }
 
+    const priceRequired = () => {
+        if (assetPriceRequired) {
+            return (
+                <div className="required">
+                    <span className="animate__animated animate__fadeIn">
+                        the token price is required
+                    </span>
+                </div>
+            );
+        }
+    }
+
     const imageRequired = () => {
         if (assetImageRequired) {
             return (
@@ -68,15 +91,20 @@ const NewAsset = () => {
 
     const run = async (e) => {
         e.preventDefault();
-        let price = document.querySelector("#itemPrice").value;
-        if (!assetImage) {
-            setAssetImageRequired(true);
+        let price = document.querySelector("#assetPrice").value;
+        if (!assetPrice || !assetImage) {
+            if (!assetPrice) {
+                setAssetPriceRequired(true);
+            }
+            if (!assetImage) {
+                setAssetImageRequired(true);
+            }    
         }
         else {
             setSubmitting(true);
             let image = await uploadImage(assetImage);
             let tokenURI = image.hash();
-            let createdAssetRes = await createAsset(collection, tokenURI, price);
+            let createdAssetRes = await createAsset(collection, tokenURI, assetPrice);
             if (address) {
                 navigate('/collection/' + createdAssetRes.address + '/' + createdAssetRes.tokenId);
             } else {
@@ -106,9 +134,10 @@ const NewAsset = () => {
                 </fieldset>
                 <fieldset>
                     <label>
-                        Price
+                        Price (Eth)
                     </label>
-                    <input type="number" value="0" id="assetPrice" />
+                    <input type="number" min="1" max="100" id="assetPrice" onChange={handlePrice} />
+                    {priceRequired()}
                 </fieldset>
                 <fieldset>
                     <label>
