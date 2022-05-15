@@ -36,8 +36,9 @@ contract NftMarketPlace is Ownable {
 
     /** 
         createOrder method
-        @notice transfer price to contract
+        @notice create a buy order
         @param _nftCollection the addres of nftCollection
+        @param _tokenId the tokenId of nftCollection
         @dev Throws if _nft does not exists
     */    
     function createOrder(NftCollection _nftCollection, uint256 _tokenId) external payable {
@@ -57,14 +58,22 @@ contract NftMarketPlace is Ownable {
         emit CreateProposalBuyOrder(address(_nftCollection), _tokenId, nftTrades[_nftCollection][_tokenId].buyProposals.length, buyProposal.proposalOwner, buyProposal.price);
     }
 
-    function processOrder(NftCollection _nftCollection, uint256 _tokenId, uint proposalIndex ) external {
+    /** 
+        process a buy order
+        @notice the nft owner change 
+        @param _nftCollection the addres of nftCollection
+        @param _tokenId the tokenId of nftCollection
+        @param _proposalIndex the index of buy proposal
+        @dev Throws if _nft does not exists
+    */  
+    function processOrder(NftCollection _nftCollection, uint256 _tokenId, uint _proposalIndex ) external {
         require(msg.sender == _nftCollection.ownerOf(_tokenId), "You are not the tokenId owner");
 
-        require(proposalIndex < nftTrades[_nftCollection][_tokenId].buyProposals.length, "this proposal for this index does not exists");
+        require(_proposalIndex < nftTrades[_nftCollection][_tokenId].buyProposals.length, "this proposal for this index does not exists");
         require(nftTrades[_nftCollection][_tokenId].status == BuyProposalStatus.Open, "no proposals for this Nft");
         nftTrades[_nftCollection][_tokenId].status = BuyProposalStatus.Executed;
 
-        BuyProposal storage buyProposal = nftTrades[_nftCollection][_tokenId].buyProposals[proposalIndex];
+        BuyProposal storage buyProposal = nftTrades[_nftCollection][_tokenId].buyProposals[_proposalIndex];
         NftCollection nftCollection = NftCollection(_nftCollection);
         payable(address(_nftCollection.ownerOf(_tokenId))).transfer(buyProposal.price);
 
@@ -81,6 +90,9 @@ contract NftMarketPlace is Ownable {
         emit ProcessProposalBuyOrder(address(_nftCollection), _tokenId, proposalIndex);
     }
 
+    /**
+        @notice cancel a buy order process
+     */
     function cancelOrders(NftCollection _nftCollection, uint256 _tokenId) external onlyOwner {
         require(nftTrades[_nftCollection][_tokenId].status == BuyProposalStatus.Open, "no proposals for this Nft");
         nftTrades[_nftCollection][_tokenId].status = BuyProposalStatus.Cancelled;
@@ -88,7 +100,7 @@ contract NftMarketPlace is Ownable {
 
 
     /*
-        getOneProposal
+        getBuyProposal
     **/
     function getBuyProposals(NftCollection _nftCollection, uint256 _tokenId, uint _index) external view returns (BuyProposal memory) {
         return nftTrades[_nftCollection][_tokenId].buyProposals[_index];

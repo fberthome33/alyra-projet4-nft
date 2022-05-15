@@ -16,7 +16,9 @@ contract NftCollectionFactory{
 
     /**
       * @notice Deploy the ERC-721 Collection contract of the artist caller to be able to create NFTs later
-      *
+      * @param _collectionName the name of the new collection
+      * @param _collectionSymbol the symbol of the new collection
+      * @param _tokenURI the tokenURI of the new collection
       * @return collectionAddress the address of the created collection contract
       */
     function createNFTCollection(string memory _collectionName, string memory _collectionSymbol, string memory _tokenURI) external returns (address collectionAddress) {
@@ -43,7 +45,10 @@ contract NftCollectionFactory{
         emit NftCollectionCreated(_collectionNameInBytes32, collectionAddress, block.timestamp, msg.sender, _tokenURI);
     }
 
-    function getCreationBytecode(string memory _collectionName, string memory _collectionSymbol) public pure returns (bytes memory) {
+    /**
+      @dev encode parameters before call contract creation
+     */
+    function getCreationBytecode(string memory _collectionName, string memory _collectionSymbol) internal pure returns (bytes memory) {
       bytes memory collectionBytecode = type(NftCollection).creationCode;
 
       return abi.encodePacked(collectionBytecode, abi.encode(_collectionName, _collectionSymbol));

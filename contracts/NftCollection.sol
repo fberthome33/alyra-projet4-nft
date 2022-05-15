@@ -25,8 +25,16 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
 
     constructor(string memory _collectionName, string memory _collectionSymbol) ERC721 (_collectionName, _collectionSymbol) {}
 
+    /** 
+        mintCollection method
+        @notice mint a new token for a collection
+        @param _tokenURI the token URI
+        @param _price the token price
+        @return the new tokenId
+        @dev Throws if price < 0
+    */  
     function mintCollection(string memory _tokenURI, uint _price) public onlyOwner returns (uint256) {
-        require(_price>0, 'Price must be expensive');
+        require(_price > 0, 'Price must be expensive');
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(msg.sender, newItemId);
@@ -41,10 +49,19 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
         return newItemId;
     }
 
+    /** 
+        tokenURI method
+        @param tokenId the tokenId
+        @dev override tokenURI method
+    */
     function tokenURI( uint256 tokenId) public view override(ERC721URIStorage, ERC721) returns (string memory) {
         return  super.tokenURI(tokenId);
     }
     
+    /** 
+        _beforeTokenTransfer method
+        @dev override _beforeTokenTransfer method
+    */
     function _beforeTokenTransfer(
         address from,
         address to,
@@ -94,12 +111,19 @@ contract NftCollection is ERC721Enumerable, ERC721URIStorage, Ownable {
         return nftDetails[_index];
     }
 
-    function setDetail(uint256 _index, bool _sellable, uint _price, string memory nftName) external  {
+    /**
+        setDetail method
+        @param _index index of a nft
+        @param _sellable sell flag of a nft
+        @param _price price of a nft
+        @param _nftName nft name
+    */
+    function setDetail(uint256 _index, bool _sellable, uint _price, string memory _nftName) external  {
         require(_index < nftDetails.length, "index out of bounds");
         NftDetail memory detail;
         detail.sellable = _sellable;
         detail.price = _price;
-        detail.nftName = nftName;
+        detail.nftName = _nftName;
         nftDetails[_index] = detail;
     }
 }
