@@ -164,7 +164,8 @@ form.createNew label {
     margin-bottom: 8px;
 }
 
-form.createNew input {
+form.createNew input,
+form.createNew button {
     font-family: inherit;
     font-size: 120%;
     padding: 8px 12px;
@@ -176,12 +177,6 @@ form.createNew input {
 
 form.createNew input[type=file] {
    display: none;
-}
-
-form.createNew input[type=submit] {
-    background-color: rgb(106, 134, 49);
-    color: white;
-    cursor: pointer;
 }
 
 #imagePreview, #imageSelector {

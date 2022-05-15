@@ -12,14 +12,15 @@ const Collection = () => {
     const [user, web3, contracts] = useOutletContext();    
     const { address } = useParams();
     const [loaded, setLoaded] = useState(false);
-    const [name, setName] = useState();
-    const [assets, setAssets] = useState([]);
+    const [collection, setCollection] = useState();
+    //const [assets, setAssets] = useState([]);
     
     const collectionDetails = useGetCollectionDetails(web3);
-    
+
     useEffect(async() => {
-        let res = await collectionDetails(address);
-        setName(res.name);
+        let collection = await collectionDetails(address);
+        //console.log(collection);
+        setCollection(collection);
         setLoaded(true);
     }, []);
 
@@ -32,9 +33,13 @@ const Collection = () => {
     return (
         <main>
             <h1>
-                Collection: {name}
+                Collection: {collection.name}<br/>
             </h1>
-            <Board type="asset" items={assets} />
+            <p>
+                details:
+                {collection.creator}
+            </p>
+            <Board type="asset" items={collection.assets} />
         </main>
     );
 }

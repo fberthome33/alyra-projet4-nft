@@ -18,6 +18,7 @@ import Explore from "./routes/explore";
 import Notfound from "./routes/notfound";
 import Loading from "./routes/loading";
 import Collections from "./routes/collections";
+import ChooseCollection from "./routes/choosecollection";
 
 import "animate.css";
 import "./App.css";
@@ -118,7 +119,7 @@ class App extends Component {
                     <Route path="/" element={<Main state={this.state} authenticate={this.authenticate} />}>
                         <Route index element={<Home />} />
                         <Route path="asset/:address" element={<Asset />} />
-                        <Route path="asset/new" element={<NewAsset />} />
+                        <Route path="asset/new" element={<ChooseCollection />} />
                         <Route path="collection/:address/new" element={<NewAsset />} />
                         <Route path="collection/:address" element={<Collection />} />
                         <Route path="collection/new" element={<NewCollection />} />

@@ -129,7 +129,6 @@ const NewCollection = () => {
         }
         else {
             setSubmitting(true);
-            console.log('running');
             /*let tokenURI = '';
             if(collectionImage){
                 let image = await uploadImage(collectionImage);
@@ -137,16 +136,24 @@ const NewCollection = () => {
             }*/
             let image = await uploadImage(collectionImage);
             let tokenURI = image.hash();
+            
+            let address = await createCollection(collectionName, tokenURI);                
+            if(address){
+                navigate('/collection/' + address);
+            } else {
+                setSubmitting(false);            
+            }
+            
+            /*
             try {
                 console.log('creating contract...');
                 console.log('collection name ' + collectionName);
-                let address = await createCollection(collectionName, tokenURI);                
                 setSubmitting(false);
-                navigate('/collection/' + address);
             } catch (error) {
-                setSubmitting(false);
                 console.log(error);
             }
+            */
+
             //await pinataPush(collectionImage);
         }
     }
@@ -178,7 +185,9 @@ const NewCollection = () => {
                     {imageRequired()}
                 </fieldset>
                 <fieldset>
-                    <input type="submit" value="create" onClick={run} disabled={submitting} />                     
+                    <button onClick={(e) => { run(e) }} disabled={submitting}>
+                        create
+                    </button>                     
                 </fieldset>
             </form>            
         </main>
