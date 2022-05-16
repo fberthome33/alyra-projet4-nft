@@ -1,4 +1,8 @@
 # alyra-projet4-nft
+Projet réalisé par 
+Fabien Berthomé
+Pierre-Fréderic Murillo
+Yves Marie Saout
 
 ## setup
 
@@ -21,6 +25,6 @@ npm start
 ```
 
 ## Lien de déploiement
--- Projet déployer sur https://fberthome33.github.io/collection/new
+Projet déployer sur https://fberthome33.github.io/alyra-projet4-nft/
 
 ## Lien de la vidéo de démonstration
