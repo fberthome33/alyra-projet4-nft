@@ -26,6 +26,8 @@ npm start
 
 ## Lien de déploiement
 Projet déployer sur https://fberthome33.github.io/alyra-projet4-nft/
+Contract Factory : https://ropsten.etherscan.io/address/0x73c93bb10e0143e0203799d00c3f2c26a371e8c5
+Une collection créée: https://ropsten.etherscan.io/address/0x6808940e77ae9fe8ade6b6f7609765a81a60aee8
 
 ## Lien de la vidéo de démonstration
 https://www.youtube.com/watch?v=Xd5ouWPgkXI
